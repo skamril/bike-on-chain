@@ -12,7 +12,8 @@ export default function NavbarBoc() {
             <LogoBoc />
           </Text>
           <Text className="chain" css={{ mt: "70px" }}>
-            B@C
+            {" "}
+            B@C{" "}
           </Text>
 
           <Navbar.Content hideIn="xs" variant="highlight">

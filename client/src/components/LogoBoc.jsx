@@ -7,6 +7,8 @@ function LogoBoc() {
     <>
       <div>
         <img height={50} src={engrenge}></img>
+     
+      
       </div>
     </>
   );
