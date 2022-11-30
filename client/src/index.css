@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'Bike-Chain';
+  src: url('../src//assets/fonts/BIKE_CHAIN.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -26,7 +32,6 @@ a:hover {
 
 body {
   margin: 0;
-  
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
@@ -35,6 +40,11 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+.chain{ 
+  font-family: 'Bike-Chain';
+font-size:3em;
+
 }
 
 button {
