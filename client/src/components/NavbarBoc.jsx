@@ -2,19 +2,20 @@ import { Navbar, Text, Avatar, Dropdown, Input } from "@nextui-org/react";
 import { Layout } from "./Layout";
 import LogoBoc from "./LogoBoc";
 import SearchIcon from "./SearchIcon";
-
+import { ConnectKitButton } from "connectkit";
 export default function NavbarBoc() {
   return (
     <Layout>
-      <Navbar rounded isBordered variant="sticky">
+      
+      <Navbar isBordered variant="sticky">
         <Navbar.Brand css={{ mr: "$4" }}>
           <Text css={{ mt: "25px", mr: "10px" }}>
             <LogoBoc />
           </Text>
-          <Text className="chain" css={{ mt: "70px" }}>
+          {/* <Text className="chain" css={{ mt: "70px" }}>
             {" "}
             B@C{" "}
-          </Text>
+          </Text> */}
 
           <Navbar.Content hideIn="xs" variant="highlight">
             <Navbar.Item
@@ -61,6 +62,7 @@ export default function NavbarBoc() {
             },
           }}
         >
+          <ConnectKitButton/>
           <Dropdown placement="bottom-right">
             <Navbar.Item>
               <Dropdown.Trigger>

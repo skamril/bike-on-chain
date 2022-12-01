@@ -1,37 +1,24 @@
-import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { publicProvider } from "wagmi/providers/public";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { WagmiConfig, createClient } from "wagmi";
+import { ConnectKitProvider, ConnectKitButton, getDefaultClient } from "connectkit";
 import NavbarBoc from "../components/NavbarBoc";
+const alchemyId = "hZFdAtuXzsgWF7VqEQR_tVIvPKe-0iKL";
 
-const { chains, provider } = configureChains(
-  [chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
-  [
-    alchemyProvider({ alchemyId: "hZFdAtuXzsgWF7VqEQR_tVIvPKe-0iKL" }),
-    publicProvider(),
-  ]
+const client = createClient(
+  getDefaultClient({
+    appName: "Your App Name",
+    alchemyId,
+  }),
 );
-
-const { connectors } = getDefaultWallets({
-  appName: "My RainbowKit App",
-  chains,
-});
-
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors,
-  provider,
-});
 
 export default function WelcomePage() {
   return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
-        <NavbarBoc />
-        <ConnectButton />
-      </RainbowKitProvider>
+    <WagmiConfig client={client}>
+      <ConnectKitProvider>
+     
+        <NavbarBoc  />
+       
+    
+        </ConnectKitProvider>
     </WagmiConfig>
   );
 }

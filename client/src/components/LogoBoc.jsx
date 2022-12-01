@@ -1,15 +1,12 @@
 import React from "react";
 
-import engrenge from "../assets/BikeOnChain3.png";
+import engrenge from "../assets/BikeOnChain1.png";
 
 function LogoBoc() {
   return (
     <>
-      <div>
-        <img height={50} src={engrenge}></img>
-     
+        <img height={60} src={engrenge}></img>
       
-      </div>
     </>
   );
 }
