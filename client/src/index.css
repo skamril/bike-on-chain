@@ -1,12 +1,10 @@
 @font-face {
-  font-family: 'Bike-Chain';
-  src: url('../src//assets/fonts/BIKE_CHAIN.ttf');
+  font-family: "Bike-Chain";
+  src: url("../src//assets/fonts/BIKE_CHAIN.ttf");
   font-weight: normal;
   font-style: normal;
 }
 :root {
- 
-
   max-width: 1400px;
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -44,27 +42,26 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
-.chain{ 
-  font-family: 'Bike-Chain';
-font-size:3em;
-
+.chain {
+  font-family: "Bike-Chain";
+  font-size: 3em;
 }
 
-.city{
-  background-image:url('../src//assets/img/city.jpg');
-  background-position: center center;
+.city {
+ 
+  background-image: url("../src//assets/img/city.jpg");
+  background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
   min-height: 600px;
 }
 
-.thief{
+.thief {
   padding: 5%;
-border-radius: 50%;
-width: 110px;
-height: 105px;
+  border-radius: 50%;
+  width: 110px;
+  height: 105px;
 }
-
 
 button {
   border-radius: 8px;

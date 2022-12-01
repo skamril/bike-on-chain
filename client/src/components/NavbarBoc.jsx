@@ -6,17 +6,11 @@ import { ConnectKitButton } from "connectkit";
 export default function NavbarBoc() {
   return (
     <Layout>
-      
       <Navbar isBordered variant="sticky">
         <Navbar.Brand css={{ mr: "$4" }}>
           <Text css={{ mt: "25px", mr: "10px" }}>
             <LogoBoc />
           </Text>
-          {/* <Text className="chain" css={{ mt: "70px" }}>
-            {" "}
-            B@C{" "}
-          </Text> */}
-
           <Navbar.Content hideIn="xs" variant="highlight">
             <Navbar.Item
               css={{
@@ -62,7 +56,7 @@ export default function NavbarBoc() {
             },
           }}
         >
-          <ConnectKitButton/>
+          <ConnectKitButton />
           <Dropdown placement="bottom-right">
             <Navbar.Item>
               <Dropdown.Trigger>
@@ -85,21 +79,18 @@ export default function NavbarBoc() {
                   Signed in as
                 </Text>
                 <Text b color="inherit" css={{ d: "flex" }}>
-                  zoey@example.com
+                  rusmir@BikeOnChain.com
                 </Text>
               </Dropdown.Item>
               <Dropdown.Item key="settings" withDivider>
-                My Settings
+                My NFT's
               </Dropdown.Item>
-              <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
-              <Dropdown.Item key="analytics" withDivider>
-                Analytics
-              </Dropdown.Item>
-              <Dropdown.Item key="system">System</Dropdown.Item>
-              <Dropdown.Item key="configurations">Configurations</Dropdown.Item>
+              <Dropdown.Item key="team_settings">My Collections</Dropdown.Item>
+
               <Dropdown.Item key="help_and_feedback" withDivider>
                 Help & Feedback
               </Dropdown.Item>
+              <Dropdown.Item key="configurations">Configurations</Dropdown.Item>
               <Dropdown.Item key="logout" withDivider color="error">
                 Log Out
               </Dropdown.Item>
