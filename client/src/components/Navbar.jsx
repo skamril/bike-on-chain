@@ -1,6 +1,6 @@
 import { Navbar, Text, Avatar, Dropdown, Input } from "@nextui-org/react";
 import { Layout } from "./Layout";
-import LogoBoc from "./LogoBoc";
+import LogoBoc from "./Logo";
 import SearchIcon from "./SearchIcon";
 import { ConnectKitButton } from "connectkit";
 export default function NavbarBoc() {
