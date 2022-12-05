@@ -4,7 +4,7 @@ import {
   ConnectKitButton,
   getDefaultClient,
 } from "connectkit";
-import NavbarBoc from "../components/NavbarBoc";
+import NavbarBoc from "../components/Navbar";
 const alchemyId = "hZFdAtuXzsgWF7VqEQR_tVIvPKe-0iKL";
 
 const client = createClient(
