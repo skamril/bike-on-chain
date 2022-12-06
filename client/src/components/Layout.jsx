@@ -1,15 +1,10 @@
 import { Content } from "./Content";
 import { ContentServices } from "./ContentServices";
-import { Box } from "./Box";
+import { Container } from "@nextui-org/react";
+
 
 export const Layout = ({ children }) => (
-  <Box
-    css={{
-      maxW: "100%",
-    }}
-  >
+  <Container css={{mw:"100%", pl:"0px"}}>
     {children}
-    <Content />
-    <ContentServices />
-  </Box>
+  </Container>
 );

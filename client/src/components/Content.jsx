@@ -1,9 +1,9 @@
 import { Text, Spacer, Grid } from "@nextui-org/react";
-import { Box } from "./Box.js";
+
 
 export const Content = () => (
   <Grid.Container>
-    <Box className="city" css={{ "@xsMax": { px: "$10" } }}>
+    
       <Grid xs={12}>
         <Text
           h1
@@ -35,6 +35,6 @@ export const Content = () => (
           deleniti tenetur cum doloremque earum inventore facilis.
         </Text>
       </Grid>
-    </Box>
+ 
   </Grid.Container>
 );

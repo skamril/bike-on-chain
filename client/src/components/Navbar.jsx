@@ -41,7 +41,10 @@ export default function NavbarBoc() {
                 placeholder="Search..."
               />
             </Navbar.Item>
-            <Navbar.Link isActive href="#">
+            <Navbar.Link isActive href="collection">
+         Collection
+            </Navbar.Link>
+            <Navbar.Link  href="collection">
               A propos
             </Navbar.Link>
             <Navbar.Link href="#">Docs</Navbar.Link>

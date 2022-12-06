@@ -1,25 +1,15 @@
-import { WagmiConfig, createClient } from "wagmi";
-import {
-  ConnectKitProvider,
-  ConnectKitButton,
-  getDefaultClient,
-} from "connectkit";
-import NavbarBoc from "../components/Navbar";
-const alchemyId = "hZFdAtuXzsgWF7VqEQR_tVIvPKe-0iKL";
-
-const client = createClient(
-  getDefaultClient({
-    appName: "Your App Name",
-    alchemyId,
-  })
-);
-
+import Navbar from "../components/Navbar";
+import { Layout } from "../components/Layout";
+import { Content } from "../components/Content";
+import { ContentServices } from "../components/ContentServices";
 export default function WelcomePage() {
   return (
-    <WagmiConfig client={client}>
-      <ConnectKitProvider>
-        <NavbarBoc />
-      </ConnectKitProvider>
-    </WagmiConfig>
+    <div className="city">
+      <Layout>
+        <Navbar />;
+         <Content />
+    <ContentServices />
+      </Layout>
+    </div>
   );
 }
