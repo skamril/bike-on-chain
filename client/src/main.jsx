@@ -6,7 +6,7 @@ import { ConnectKitProvider, getDefaultClient } from "connectkit";
 import App from "./App";
 import "./index.css";
 
-const alchemyId = import.meta.env.VITE_ALCHEMY_POL_MUM_ID;
+const alchemyId = import.meta.env.VITE_ALCHEMY_GOELRI_ID;
 const chains = [chain.mainnet,chain.goerli, chain.polygon, chain.polygonMumbai];
 const client = createClient(
   getDefaultClient({
