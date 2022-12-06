@@ -131,8 +131,22 @@ emit StolenBike(_tokenId,_stolen);
 
     constructor() ERC721("BikeOnChain", "BOC") {}
 
+    function getInfos(uint256 _tokenId)
+        public
+        view
+        returns (
+            string memory,
+            string memory,
+            uint256
+        )
+    {
+        // Retrieve the data from the mapping
+        Informations memory d = data[_tokenId];
+        return (d._brand, d._description, d._serialNumber);
+    }
+
     function MintBike(
-        address _ownerOfBike,
+        address _player,
         string memory _tokenURI,
         uint256 _serialNumber,
         string calldata _description,
@@ -144,7 +158,7 @@ emit StolenBike(_tokenId,_stolen);
         uint256 newItemId = _tokenIds.current();
         data[newItemId] = Informations(_serialNumber, _description, _brand);
 
-        _mint(_ownerOfBike, newItemId);
+        _mint(_player, newItemId);
         _setTokenURI(newItemId, _tokenURI);
 
         return newItemId;
@@ -184,7 +198,7 @@ emit StolenBike(_tokenId,_stolen);
         require(_ownerOf(_tokenId) == msg.sender);
         // Update the state of the NFT.
         entretien[_tokenId] = CarnetEntretien(_enseigne, _commentaire);
-          emit EntretienEffectue(carnet.length - 1);
+        emit EntretienEffectue(carnet.length - 1);
     }
 }
 >>>>>>> dd0fe45 (Modif du nom des compostants, ajout contrat solidity dans hardhat  (#1))
