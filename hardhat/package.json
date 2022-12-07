@@ -5,7 +5,11 @@
     "hardhat": "^2.12.2"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@openzeppelin/contracts": "^4.8.0",
     "dotenv": "^16.0.3"
+=======
+    "@openzeppelin/contracts": "^4.8.0"
+>>>>>>> dd0fe45 (Modif du nom des compostants, ajout contrat solidity dans hardhat  (#1))
   }
 }

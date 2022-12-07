@@ -1,9 +1,17 @@
 import { Text, Spacer, Grid } from "@nextui-org/react";
+<<<<<<< HEAD
 
 
 export const Content = () => (
   <Grid.Container>
     
+=======
+import { Box } from "./Box.js";
+
+export const Content = () => (
+  <Grid.Container>
+    <Box className="city" css={{ "@xsMax": { px: "$10" } }}>
+>>>>>>> dd0fe45 (Modif du nom des compostants, ajout contrat solidity dans hardhat  (#1))
       <Grid xs={12}>
         <Text
           h1
@@ -35,6 +43,10 @@ export const Content = () => (
           deleniti tenetur cum doloremque earum inventore facilis.
         </Text>
       </Grid>
+<<<<<<< HEAD
  
+=======
+    </Box>
+>>>>>>> dd0fe45 (Modif du nom des compostants, ajout contrat solidity dans hardhat  (#1))
   </Grid.Container>
 );

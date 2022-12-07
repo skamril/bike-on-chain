@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Routes, Route } from "react-router-dom";
 import WelcomePage from "./pages/WelcomePage";
 import Admin from "./pages/Admin";
@@ -22,4 +23,15 @@ function App() {
     </Routes>
   );
 }
+=======
+import WelcomePage from "./pages/WelcomePage";
+function App() {
+  return (
+    <div>
+      <WelcomePage />
+    </div>
+  );
+}
+
+>>>>>>> dd0fe45 (Modif du nom des compostants, ajout contrat solidity dans hardhat  (#1))
 export default App;
