@@ -1,0 +1,16 @@
+name: GitHub Actions
+on: [push]
+jobs:
+  Lint:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-node@v3
+          with:
+            node-version: 16
+        - name: Install dependencies for the client
+          working-directory: client
+          run: npm install
+        - name: Lint client
+          working-directory: client
+          run: npm run lint

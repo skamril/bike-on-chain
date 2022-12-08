@@ -9,7 +9,6 @@ dist-ssr
 .idea
 
 next-env.d.ts
-.env
 *.local
 npm-debug.log*
 .DS_Store
