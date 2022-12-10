@@ -6,10 +6,18 @@ import About from "./About";
 import { Container } from "@nextui-org/react";
 import FAQ from "./FAQ";
 import Footer from "./Footer";
+import Certificates from "./Certificates";
 
 function App() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        minWidth: 900,
+      }}
+    >
       <Header />
       <Container lg css={{ flex: 1 }}>
         <Routes>
@@ -17,6 +25,7 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/about" element={<About />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/my-certificates" element={<Certificates />} />
         </Routes>
       </Container>
       <Footer />

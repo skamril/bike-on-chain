@@ -10,6 +10,7 @@ function Hero({ children }) {
         alignItems: "center",
         background: `url(${bikesMotif})`,
         padding: "50px 0",
+        marginBottom: 15,
       }}
     >
       <div
