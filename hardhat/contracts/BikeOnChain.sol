@@ -3,10 +3,11 @@ pragma solidity 0.8.17;
 import "../node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "../node_modules/@openzeppelin/contracts/utils/Counters.sol";
+import "../node_modules/@openzeppelin/contracts/token/common/ERC2981.sol";
+import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 
-contract BikeOnChain is ERC721URIStorage {
+contract BikeOnChain is ERC2981, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
-
     struct Bike {
         uint64 serialNumber;
         string model;
@@ -31,21 +32,60 @@ contract BikeOnChain is ERC721URIStorage {
     event StolenBike(uint256 indexed bikeId, bool stolen);
     event BikeOnSale(uint256 indexed bikeId, bool onSale);
     event AuthorizedMaintenance(address indexed _address);
+    event RoyaltyPaid( address indexed _newOwner,
+        uint256 indexed _bikeId,
+        uint256 _amount
+    );
+uint _Royalty = 10*10 ;
+    constructor() ERC721("BikeOnChain", "BOC") {
+        _setDefaultRoyalty(msg.sender, 10*10);
+    }
 
-    constructor() ERC721("BikeOnChain", "BOC") {}
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override(ERC721, ERC2981)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
+
+    function _burn(uint256 tokenId) internal virtual override {
+        super._burn(tokenId);
+        _resetTokenRoyalty(tokenId);
+    }
+
+    function burnNFT(uint256 tokenId) public onlyOwner {
+        _burn(tokenId);
+    }
 
     modifier checkWhitelist() {
-        require(authorizedMaintenance[msg.sender], "You are not register as maintenance ");
+        require(
+            authorizedMaintenance[msg.sender],
+            "You are not register as maintenance "
+        );
         _;
     }
 
     function authorizeMaintenance(uint256 _tokenId, address _address) public {
-        require(_ownerOf(_tokenId) == msg.sender, "Only the owner of the bike can authorize maintenance");
+        require(
+            _ownerOf(_tokenId) == msg.sender,
+            "Only the owner of the bike can authorize maintenance"
+        );
         authorizedMaintenance[_address] = true;
         emit AuthorizedMaintenance(_address);
     }
 
-    function getInfos(uint256 _tokenId) public view returns (string memory, string memory, uint64) {
+    function getInfos(uint256 _tokenId)
+        public
+        view
+        returns (
+            string memory,
+            string memory,
+            uint64
+        )
+    {
         Bike storage bike = bikes[_tokenId];
         return (bike.brand, bike.model, bike.serialNumber);
     }
@@ -53,10 +93,11 @@ contract BikeOnChain is ERC721URIStorage {
     function mintBike(
         address _newOwner,
         string memory _tokenURI,
-        string calldata _model,
-        string calldata _brand,
+        string memory _model,
+        string memory _brand,
         uint64 _serialNumber
-    ) public returns (uint256) {
+    ) public onlyOwner returns (uint256) {
+        require(msg.sender.balance >= 10*10, "Insufficient balance");
         tokenIds.increment();
         uint256 newBikeId = tokenIds.current();
         bikes[newBikeId] = Bike({
@@ -68,15 +109,22 @@ contract BikeOnChain is ERC721URIStorage {
         });
         _mint(_newOwner, newBikeId);
         _setTokenURI(newBikeId, _tokenURI);
+       
+
         emit BikeRegistered(newBikeId);
+        RoyaltyPaid(newBikeId, _Royalty);
         return newBikeId;
     }
 
-    function setMaintenance(uint256 _tokenId, string calldata _store, string calldata _commentar)
-        external
-        checkWhitelist
-    {
-        require(_ownerOf(_tokenId) == msg.sender, "Only the owner of the bike can set maintenance information");
+    function setMaintenance(
+        uint256 _tokenId,
+        string calldata _store,
+        string calldata _commentar
+    ) external checkWhitelist {
+        require(
+            _ownerOf(_tokenId) == msg.sender,
+            "Only the owner of the bike can set maintenance information"
+        );
         maintenance[_tokenId] = MaintenanceBook({
             store: _store,
             commentar: _commentar
@@ -85,17 +133,23 @@ contract BikeOnChain is ERC721URIStorage {
     }
 
     function declareStolen(uint256 _tokenId, bool _stolen) public {
-        require(_ownerOf(_tokenId) == msg.sender, "Only the owner of the bike can declare it stolen");
+        require(
+            _ownerOf(_tokenId) == msg.sender,
+            "Only the owner of the bike can declare it stolen"
+        );
         Bike storage bike = bikes[_tokenId];
         bike.stolen = _stolen;
-emit StolenBike(_tokenId,_stolen);
+        emit StolenBike(_tokenId, _stolen);
     }
-       function setOnSale(uint256 _tokenId, bool _onSale) public {
-           require(_ownerOf(_tokenId) == msg.sender, "Only the owner of the bike can sell this bike");
-     require(bikes[_tokenId].stolen == false);
-      Bike storage bike = bikes[_tokenId];
-      bike.onSale = _onSale;
-    emit BikeOnSale(_tokenId,_onSale);
-    
-       }
+
+    function setOnSale(uint256 _tokenId, bool _onSale) public {
+        require(
+            _ownerOf(_tokenId) == msg.sender,
+            "Only the owner of the bike can sell this bike"
+        );
+        require(bikes[_tokenId].stolen == false);
+        Bike storage bike = bikes[_tokenId];
+        bike.onSale = _onSale;
+        emit BikeOnSale(_tokenId, _onSale);
     }
+}
