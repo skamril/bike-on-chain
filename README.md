@@ -34,6 +34,12 @@ Récupérer l'adresse du contrat après le déploiement et ajouter la clé `VITE
 VITE_CONTRACT_ADDRESS=clé_du_contrat
 ````
 
+Lancer la commande suivante pour lancer le nœud hardhat et récupérer des comptes de test :
+
+```
+> npx hardhat node
+```
+
 Retourner à la racine du projet.
 
 ```
