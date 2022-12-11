@@ -5,27 +5,38 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 const hre = require("hardhat");
-
+// const { txParams } = require("../utils/trnsactionHelper");
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
 
-  const lockedAmount = hre.ethers.utils.parseEther("1");
+	// const ethParams = await txParams();
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
-
-  await lock.deployed();
-
-  console.log(
-    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
-  );
+	const [deployer, user] = await ethers.getSigners();
+  
+	console.log("Deploying contract with the account:", deployer.address);
+  
+	console.log("Account balance:", (await deployer.getBalance()).toString());
+  
+	const BikeOnChain = await ethers.getContractFactory("BikeOnChain");
+	const instance = await BikeOnChain.deploy(
+	// 	{
+	//   gasPrice: ethParams.txGasPrice,
+	//   gasLimit: ethParams.txGasLimit,
+	// }
+	);
+  
+	console.log("BikeOnChain address:", instance.address);
+  
+	await instance.connect(deployer).mintBike(await user.getAddress(), "il-est-beau-mon-velo","","", 1234);
+  
+	const tokenURI = await instance.tokenURI(1);
+  
+	console.log("Prime tokenURI:", tokenURI);
+  
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+main()
+  .then(() => process.exit(0))
+  .catch(error => {
+	console.error(error);
+	process.exit(1);
+  });

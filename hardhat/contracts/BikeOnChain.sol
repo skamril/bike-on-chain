@@ -32,14 +32,16 @@ contract BikeOnChain is ERC2981, ERC721URIStorage, Ownable {
     event StolenBike(uint256 indexed bikeId, bool stolen);
     event BikeOnSale(uint256 indexed bikeId, bool onSale);
     event AuthorizedMaintenance(address indexed _address);
-    event RoyaltyPaid( address indexed _newOwner,
-        uint256 indexed _bikeId,
-        uint256 _amount
+    event RoyaltyPaid(
+        address indexed _newOwner,
+        uint256 indexed newBikeId,
+        uint256 royalty
     );
-uint _Royalty = 10*10 ;
+
     constructor() ERC721("BikeOnChain", "BOC") {
-        _setDefaultRoyalty(msg.sender, 10*10);
+        _setDefaultRoyalty(msg.sender, 1 * 1**18);
     }
+
 
     function supportsInterface(bytes4 interfaceId)
         public
@@ -96,8 +98,10 @@ uint _Royalty = 10*10 ;
         string memory _model,
         string memory _brand,
         uint64 _serialNumber
-    ) public onlyOwner returns (uint256) {
-        require(msg.sender.balance >= 10*10, "Insufficient balance");
+    ) public payable onlyOwner returns (uint256) {
+        uint256 royalty = 1 * 1**18;
+        require(msg.sender.balance >= royalty, "Insufficient balance");
+
         tokenIds.increment();
         uint256 newBikeId = tokenIds.current();
         bikes[newBikeId] = Bike({
@@ -109,10 +113,9 @@ uint _Royalty = 10*10 ;
         });
         _mint(_newOwner, newBikeId);
         _setTokenURI(newBikeId, _tokenURI);
-       
 
         emit BikeRegistered(newBikeId);
-        RoyaltyPaid(newBikeId, _Royalty);
+        emit RoyaltyPaid(_newOwner, newBikeId, royalty);
         return newBikeId;
     }
 
@@ -132,7 +135,10 @@ uint _Royalty = 10*10 ;
         emit MaintenanceDone(_tokenId);
     }
 
-    function declareStolen(uint256 _tokenId, bool _stolen) public {
+    function declareStolen(uint256 _tokenId, bool _stolen) 
+    
+    
+    public {
         require(
             _ownerOf(_tokenId) == msg.sender,
             "Only the owner of the bike can declare it stolen"
