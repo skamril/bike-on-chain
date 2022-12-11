@@ -3,8 +3,9 @@ import ReactDOM from "react-dom/client";
 import { NextUIProvider } from "@nextui-org/react";
 import { WagmiConfig, createClient } from "wagmi";
 import { configureChains } from "@wagmi/core";
-import { polygonMumbai } from "@wagmi/core/chains";
+import { polygonMumbai, hardhat } from "@wagmi/core/chains";
 import { infuraProvider } from "wagmi/providers/infura";
+import { jsonRpcProvider } from "@wagmi/core/providers/jsonRpc";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { ConnectKitProvider } from "connectkit";
@@ -12,8 +13,15 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./components/App";
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [polygonMumbai],
-  [infuraProvider({ apiKey: import.meta.env.VITE_INFURA_KEY })]
+  [polygonMumbai, hardhat],
+  [
+    infuraProvider({ apiKey: import.meta.env.VITE_INFURA_KEY }),
+    jsonRpcProvider({
+      rpc: (chain) => ({
+        http: `https://${chain.id}.example.com`,
+      }),
+    }),
+  ]
 );
 
 const client = createClient({
