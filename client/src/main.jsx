@@ -13,7 +13,7 @@ import App from "./components/App";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [polygonMumbai],
-  [infuraProvider({ apiKey: import.meta.env.INFURA_KEY })]
+  [infuraProvider({ apiKey: import.meta.env.VITE_INFURA_KEY })]
 );
 
 const client = createClient({

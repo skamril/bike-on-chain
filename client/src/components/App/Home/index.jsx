@@ -2,7 +2,7 @@ import { Text } from "@nextui-org/react";
 import video from "../../../assets/videos/pexels-pavel-danilyuk-5790079.mp4";
 import polygonLogo from "../../../assets/images/polygon-matic-logo.png";
 import bicycleBlockChainIcon from "../../../assets/images/bicycle-block-chain.png";
-import certificatIcon from "../../../assets/images/certificat.png";
+import certificateIcon from "../../../assets/images/certificate.png";
 import thiefIcon from "../../../assets/images/thief.png";
 import TextBlock from "./TextBlock";
 
@@ -67,7 +67,7 @@ function Home() {
           blockchain database stores data in blocks that are linked together in
           a chain.
         </TextBlock>
-        <TextBlock icon={certificatIcon}>
+        <TextBlock icon={certificateIcon}>
           Les certificats d'authentification serveur sont des certificats qui
           servent à identifier de façon sûre le serveur (ou les applications)
           auprès d'autres applications tierces. En effet comme tous les

@@ -5,7 +5,9 @@ function About() {
   return (
     <>
       <Hero>
-        <Text h2>À propos de Bike On Chain</Text>
+        <Text h2 css={{ m: 0 }}>
+          À propos de Bike On Chain
+        </Text>
       </Hero>
       <Text>TODO</Text>
     </>

@@ -1,13 +1,28 @@
 import { Navbar, Text, Image, Dropdown } from "@nextui-org/react";
 import { ConnectKitButton } from "connectkit";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
 import { FaSearch } from "react-icons/fa";
+import certificateIcon from "../../assets/images/certificate.png";
+
+const PUBLIC_LINKS_DATA = [
+  [
+    "/search",
+    <>
+      Rechercher <FaSearch style={{ marginLeft: 5, width: 16, padding: 0 }} />
+    </>,
+  ],
+  ["/about", "À propos"],
+  ["/faq", "FAQ"],
+];
 
 function Header() {
   const { isConnected } = useAccount();
   const { pathname } = useLocation();
-  const isMySpaceActive = pathname.startsWith("/myspace");
+  const navigate = useNavigate();
+  const isPublicLinkActive = !!PUBLIC_LINKS_DATA.find(
+    ([to]) => to === pathname
+  );
 
   return (
     <Navbar
@@ -22,31 +37,36 @@ function Header() {
         <Text b>Bike On Chain</Text>
       </Navbar.Brand>
       <Navbar.Content
-        enableCursorHighlight={!isMySpaceActive}
         variant="highlight"
         activeColor="neutral"
+        enableCursorHighlight={isPublicLinkActive}
       >
-        <Navbar.Link as={Link} to="/search" isActive={pathname === "/search"}>
-          Rechercher
-          <FaSearch style={{ marginLeft: 5, width: 16, padding: 0 }} />
-        </Navbar.Link>
-        <Navbar.Link as={Link} to="/about" isActive={pathname === "/about"}>
-          À propos
-        </Navbar.Link>
-        <Navbar.Link as={Link} to="/faq" isActive={pathname === "/faq"}>
-          FAQ
-        </Navbar.Link>
+        {PUBLIC_LINKS_DATA.map(([to, label]) => (
+          <Navbar.Link key={to} as={Link} to={to} isActive={to === pathname}>
+            {label}
+          </Navbar.Link>
+        ))}
       </Navbar.Content>
       <Navbar.Content>
         {isConnected && (
-          <Dropdown isBordered isActive={isMySpaceActive}>
+          <Dropdown isBordered>
             <Navbar.Item>
               <Dropdown.Button light ripple={false}>
                 Mon espace
               </Dropdown.Button>
             </Navbar.Item>
-            <Dropdown.Menu>
-              <Dropdown.Item description="Liste des mes vélos">
+            <Dropdown.Menu onAction={navigate}>
+              <Dropdown.Item
+                key="/my-certificates"
+                description="Liste des mes vélos"
+                icon={
+                  <img
+                    src={certificateIcon}
+                    width={25}
+                    style={{ marginRight: 5 }}
+                  />
+                }
+              >
                 Mes certificats
               </Dropdown.Item>
             </Dropdown.Menu>

@@ -9,6 +9,7 @@ function Search() {
       <div style={{ display: "flex", gap: 5 }}>
         <Input
           labelLeft="S/N"
+          aria-label="Taper le numéro de série"
           placeholder="Taper le numéro de série"
           size="xl"
           animated={false}
