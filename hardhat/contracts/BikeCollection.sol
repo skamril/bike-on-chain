@@ -27,12 +27,6 @@ contract BikeCollection is ERC721URIStorage, Ownable {
     // Structs
     ////////////////////////////////////////////////////////////////
 
-    struct ServiceBookEntry {
-        string title;
-        string description;
-        uint date;
-    }
-
     struct Bike {
         uint256 id;
         string name;
@@ -73,7 +67,6 @@ contract BikeCollection is ERC721URIStorage, Ownable {
     Counters.Counter private _tokenIds;
     Counters.Counter private _groupIds;
     mapping(uint256 => Bike) private _bikeByTokenId;
-    mapping(uint256 => ServiceBookEntry[]) private _serviceBookByTokenId;
     mapping(uint256 => uint256[]) private _tokenIdsByGroupId;
 
     ////////////////////////////////////////////////////////////////
@@ -112,11 +105,8 @@ contract BikeCollection is ERC721URIStorage, Ownable {
     ) private onlyOwner returns (uint256) {
         _tokenIds.increment();
         uint256 currentTokenId = _tokenIds.current();
-
         _safeMint(msg.sender, currentTokenId);
-
         _bikeByTokenId[currentTokenId] = Bike(currentTokenId, name, description, image, buildYear, 0, "", Status.Idle);
-
         _setTokenURI(currentTokenId, _getTokenURI(currentTokenId));
 
         return currentTokenId;
@@ -137,9 +127,7 @@ contract BikeCollection is ERC721URIStorage, Ownable {
         for (uint i = 0; i < amount; i++) {
             uint256 tokenId = _tokenIdsByGroupId[groupId][_tokenIdsByGroupId[groupId].length - 1];
             _tokenIdsByGroupId[groupId].pop();
-
             _bikeByTokenId[tokenId].status = Status.OnSale;
-
             safeTransferFrom(from, to, tokenId, "");
         }
 
@@ -160,6 +148,7 @@ contract BikeCollection is ERC721URIStorage, Ownable {
     function _transfer(address from, address to, uint256 tokenId) internal override {
         require(_bikeByTokenId[tokenId].status != Status.Idle, "Idle mode");
         require(_bikeByTokenId[tokenId].status == Status.OnSale ? keccak256(abi.encode(_bikeByTokenId[tokenId].serialNumber)) != keccak256(abi.encode("")) : true, "Call transferForService");
+       
         super._transfer(from, to, tokenId);
     }
 
@@ -211,7 +200,7 @@ contract BikeCollection is ERC721URIStorage, Ownable {
                 '"description": "', bike.description, '",',
                 '"image": "', bike.image, '",',
                 '"status": ', Strings.toString(uint8(bike.status)), ',',
-                '"external_link": "http://bike-on-chain.vercel.app/', Strings.toHexString(uint256(uint160(address(this))), 20), '/', Strings.toString(tokenId), '"',
+                '"external_link": "http://bike-on-chain.vercel.app/', Strings.toHexString(uint256(uint160(address(this))), 20), '/', Strings.toString(tokenId), '",',
                 '"attributes": [',
                     '{',
                         '"trait_type": "Build year",', 
