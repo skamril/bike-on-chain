@@ -5,7 +5,9 @@ function FAQ() {
   return (
     <>
       <Hero>
-        <Text h2>Foire aux questions</Text>
+        <Text h2 css={{ m: 0 }}>
+          Foire aux questions
+        </Text>
       </Hero>
       <Collapse.Group>
         <Collapse title="Question 1">
