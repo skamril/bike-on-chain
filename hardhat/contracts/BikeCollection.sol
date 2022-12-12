@@ -8,6 +8,12 @@ import "../node_modules/@openzeppelin/contracts/utils/Counters.sol";
 import "../node_modules/@openzeppelin/contracts/utils/Strings.sol";
 import "../node_modules/@openzeppelin/contracts/utils/Base64.sol";
 
+/// @title A collection contract (ERC721) for bikes.
+/// @author Samir Kamal
+/// @author Rusmir Sadikovic 
+/// @dev Use Ownable contract from OpenZeppelin
+/// @notice Allow to create a collection of bikes.
+///         To mint multiple bike at once.
 contract BikeCollection is ERC721URIStorage, Ownable {
     using Counters for Counters.Counter; 
 
@@ -57,6 +63,11 @@ contract BikeCollection is ERC721URIStorage, Ownable {
 
     modifier ifTokenApprovedOrOwner(uint256 id) {
         require(_isApprovedOrOwner(_msgSender(), id), "Caller is not bike owner or approved");
+        _;
+    }
+
+    modifier ifValidStatus(uint tokenId) {
+        require(_bikeByTokenId[tokenId].status != Status.Idle && _bikeByTokenId[tokenId].status != Status.OnSale, "Not allowed");
         _;
     }
 
@@ -147,7 +158,7 @@ contract BikeCollection is ERC721URIStorage, Ownable {
 
     function _transfer(address from, address to, uint256 tokenId) internal override {
         require(_bikeByTokenId[tokenId].status != Status.Idle, "Idle mode");
-        require(_bikeByTokenId[tokenId].status == Status.OnSale ? keccak256(abi.encode(_bikeByTokenId[tokenId].serialNumber)) != keccak256(abi.encode("")) : true, "Call transferForService");
+        require(_bikeByTokenId[tokenId].status == Status.InService ? keccak256(abi.encode(_bikeByTokenId[tokenId].serialNumber)) != keccak256(abi.encode("")) : true, "Call transferForService");
        
         super._transfer(from, to, tokenId);
     }
@@ -156,6 +167,18 @@ contract BikeCollection is ERC721URIStorage, Ownable {
     // Status
     ////////////////////////////////////////////////////////////////
     
+    function setStealed(uint256 tokenId) external ifTokenExist(tokenId) ifTokenApprovedOrOwner(tokenId) ifValidStatus(tokenId) {
+        _bikeByTokenId[tokenId].status = Status.Stealed;
+    }
+
+    function setInService(uint256 tokenId) external ifTokenExist(tokenId) ifTokenApprovedOrOwner(tokenId) ifValidStatus(tokenId) {
+        _bikeByTokenId[tokenId].status = Status.InService;
+    }
+
+    function setOutOfService(uint256 tokenId) external ifTokenExist(tokenId) ifTokenApprovedOrOwner(tokenId) ifValidStatus(tokenId) {
+        _bikeByTokenId[tokenId].status = Status.OutOfService;
+    }
+
     function _statusToString(Status status) private pure returns (string memory) {
         if (status == Status.Idle) {
             return "Idle";

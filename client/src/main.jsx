@@ -4,7 +4,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import { WagmiConfig, createClient } from "wagmi";
 import { configureChains } from "@wagmi/core";
 import { polygonMumbai, hardhat } from "@wagmi/core/chains";
-import { infuraProvider } from "wagmi/providers/infura";
+import { alchemyProvider } from "@wagmi/core/providers/alchemy";
 import { jsonRpcProvider } from "@wagmi/core/providers/jsonRpc";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
@@ -15,10 +15,10 @@ import App from "./components/App";
 const { chains, provider, webSocketProvider } = configureChains(
   [polygonMumbai, hardhat],
   [
-    infuraProvider({ apiKey: import.meta.env.VITE_INFURA_KEY }),
+    alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_KEY }),
     jsonRpcProvider({
-      rpc: (chain) => ({
-        http: `https://${chain.id}.example.com`,
+      rpc: () => ({
+        http: "http://localhost:8545",
       }),
     }),
   ]
