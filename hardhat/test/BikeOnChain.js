@@ -42,7 +42,7 @@ describe("Bike On Chain contracts", function () {
 
     await expect(collection.batchMint(2, "Rockrider Bike", "Good bike", "http//example.com/bike.jpg", 2022))
       .to.emit(collection, "GroupCreated")
-      .withArgs(anyValue, 2);
+      .withArgs(anyValue, 2, anyValue);
 
     expect(await collection.getGroupsAmount()).to.be.eq(1);
 

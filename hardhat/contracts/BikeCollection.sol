@@ -48,7 +48,7 @@ contract BikeCollection is ERC721URIStorage, Ownable {
     // Events
     ////////////////////////////////////////////////////////////////
 
-    event GroupCreated(uint256 id, uint16 amount); 
+    event GroupCreated(uint256 id, uint16 amount, Bike template); 
 
     event GroupUpdated(uint256 id, uint amount); 
 
@@ -105,7 +105,11 @@ contract BikeCollection is ERC721URIStorage, Ownable {
             _tokenIdsByGroupId[currentGroupId].push(tokenId);
         } 
 
-        emit GroupCreated(currentGroupId, amount);
+        emit GroupCreated(
+            currentGroupId, 
+            amount, 
+            Bike(0, name, description, image, buildYear, 0, "", Status.Idle)
+        );
     }
 
     function _mintBike(

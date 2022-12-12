@@ -3,20 +3,22 @@ import Web3 from "web3";
 import EthContext from "./EthContext";
 import { reducer, actions, initialState } from "./state";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 function EthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const navigate = useNavigate();
 
-  const init = useCallback(async (artifact) => {
-    if (artifact) {
+  const init = useCallback(async (artifacts) => {
+    if (artifacts) {
       const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
       const accounts = await web3.eth.requestAccounts();
+      const account = accounts ? accounts[0] : null;
       const networkID = await web3.eth.net.getId();
-      const { abi } = artifact;
       let address, contract;
       try {
         address = import.meta.env.VITE_CONTRACT_ADDRESS;
-        contract = new web3.eth.Contract(abi, address);
+        contract = new web3.eth.Contract(artifacts.factory.abi, address);
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
@@ -25,18 +27,28 @@ function EthProvider({ children }) {
       dispatch({
         type: actions.init,
         data: {
-          artifact,
+          artifacts,
           web3,
           accounts,
           networkID,
           contract,
           // Extra
-          account: accounts[0],
-          isConnected: !!accounts[0],
+          account,
+          isConnected: !!account,
           isOwner:
-            (await contract.methods.owner().call({ from: accounts[0] })) ===
-            accounts[0],
+            (await contract.methods.owner().call({ from: account })) ===
+            account,
+          isManufacturer:
+            (await contract.methods
+              .isCollectionOwner()
+              .call({ from: account })) === true,
           loadStatus: "loaded",
+          getCollection: async () => {
+            const address = await contract.methods
+              .getCollection()
+              .call({ from: account });
+            return new web3.eth.Contract(artifacts.collection.abi, address);
+          },
         },
       });
     }
@@ -45,10 +57,13 @@ function EthProvider({ children }) {
   useEffect(() => {
     const tryInit = async () => {
       try {
-        const artifact = await import(
-          "../../../contracts/BikeCollectionFactory.json"
-        );
-        init(artifact);
+        const artifacts = {
+          factory: await import(
+            "../../../contracts/BikeCollectionFactory.json"
+          ),
+          collection: await import("../../../contracts/BikeCollection.json"),
+        };
+        init(artifacts);
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
@@ -61,14 +76,16 @@ function EthProvider({ children }) {
   useEffect(() => {
     const events = ["chainChanged", "accountsChanged"];
     const handleChange = () => {
-      init(state.artifact);
+      navigate("/");
+      location.reload();
     };
 
     events.forEach((e) => window.ethereum.on(e, handleChange));
+
     return () => {
       events.forEach((e) => window.ethereum.removeListener(e, handleChange));
     };
-  }, [init, state.artifact]);
+  }, [init, navigate]);
 
   return (
     <EthContext.Provider
