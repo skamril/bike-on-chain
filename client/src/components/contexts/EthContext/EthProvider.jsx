@@ -43,10 +43,10 @@ function EthProvider({ children }) {
               .isCollectionOwner()
               .call({ from: account })) === true,
           loadStatus: "loaded",
-          getCollection: async () => {
-            const address = await contract.methods
-              .getCollection()
-              .call({ from: account });
+          getCollection: async (addr) => {
+            const address =
+              addr ||
+              (await contract.methods.getCollection().call({ from: account }));
             return new web3.eth.Contract(artifacts.collection.abi, address);
           },
         },
