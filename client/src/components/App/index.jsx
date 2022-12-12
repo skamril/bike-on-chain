@@ -7,6 +7,7 @@ import { Container } from "@nextui-org/react";
 import FAQ from "./FAQ";
 import Footer from "./Footer";
 import Certificates from "./Certificates";
+import CreateCertificates from "./CreateCertificates";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/my-certificates" element={<Certificates />} />
+          <Route path="/create-certificates" element={<CreateCertificates />} />
         </Routes>
       </Container>
       <Footer />
