@@ -1,13 +1,13 @@
 import { Input, Text } from "@nextui-org/react";
-import Form from "../common/Form";
+import useEth from "../contexts/EthContext/useEth";
 import Hero from "./shared/Hero";
 import PropTypes from "prop-types";
-import { useEth } from "../contexts/EthContext";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
+import Form from "../common/Form";
 
-function CreateCertificates({ setLoading }) {
+function CreateManufacturer({ setLoading }) {
   const {
-    state: { getCollection, account },
+    state: { contract, account },
   } = useEth();
 
   ////////////////////////////////////////////////////////////////
@@ -20,23 +20,19 @@ function CreateCertificates({ setLoading }) {
     setLoading(true);
 
     try {
-      const collection = await getCollection();
-
-      await collection.methods
-        .batchMint(
-          event.target.amount.value,
+      await contract.methods
+        .createCollection(
           event.target.name.value,
-          event.target.description.value,
-          event.target.image.value,
-          event.target.buildYear.value
+          event.target.symbol.value,
+          event.target.address.value
         )
         .send({ from: account });
 
-      toast.success("Certificats créés avec succès");
+      toast.success("Fabricant ajouté avec succès");
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);
-      toast.error("Impossible de créer les certificats");
+      toast.error("Impossible d'ajouter le fabricant");
     }
 
     setLoading(false);
@@ -50,33 +46,24 @@ function CreateCertificates({ setLoading }) {
     <>
       <Hero>
         <Text h2 css={{ m: 0 }}>
-          Créer un certificats
+          Ajouter un fabricant
         </Text>
       </Hero>
       <Form onSubmit={handleSubmit} submitLabel="Créer">
+        <Input name="name" clearable bordered label="Name" required />
         <Input
-          name="amount"
+          name="symbol"
           clearable
           bordered
-          label="Nombre"
-          type="number"
+          label="Symbol"
+          initialValue="BOC"
           required
         />
-        <Input name="name" clearable bordered label="Nom" required />
         <Input
-          name="description"
+          name="address"
           clearable
           bordered
-          label="Description"
-          required
-        />
-        <Input name="image" clearable bordered label="Image" required />
-        <Input
-          name="buildYear"
-          clearable
-          bordered
-          label="Année de fabrication"
-          type="number"
+          label="Adresse du fabricant"
           required
         />
       </Form>
@@ -84,8 +71,8 @@ function CreateCertificates({ setLoading }) {
   );
 }
 
-CreateCertificates.propTypes = {
+CreateManufacturer.propTypes = {
   setLoading: PropTypes.func.isRequired,
 };
 
-export default CreateCertificates;
+export default CreateManufacturer;
