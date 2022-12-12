@@ -24,21 +24,23 @@ Ajouter le network hardhat à MetaMask :
 
 Copier les `*.json` des contrats présent après la compilation dans ***hardhat/artifacts/contracts/*** vers ***client/contrats/*** (ignorer les `*.dgb.json`).
 
-```
-> npx hardhat run scripts/deploy.js
-```
-
-Récupérer l'adresse du contrat après le déploiement et ajouter la clé `VITE_CONTRACT_ADDRESS` dans un fichier .env.local à la racine de ***client***.
-
-````
-VITE_CONTRACT_ADDRESS=clé_du_contrat
-````
-
 Lancer la commande suivante pour lancer le nœud hardhat et récupérer des comptes de test :
 
 ```
 > npx hardhat node
 ```
+
+Puis :
+
+```
+> npx hardhat run scripts/deploy.js --network localhost
+```
+
+Récupérer l'adresse du contrat après le déploiement et ajouter la clé dans la variable d'environnement `VITE_CONTRACT_ADDRESS` dans un fichier .env.local à la racine de ***client***.
+
+````
+VITE_CONTRACT_ADDRESS=clé_du_contrat
+````
 
 Retourner à la racine du projet.
 
@@ -58,7 +60,7 @@ Ajouter la clé `VITE_ALCHEMY_KEY` dans le fichier .env.local à la racine de **
 
 ````
 VITE_CONTRACT_ADDRESS=clé_du_contrat
-VITE_INFURA_KEY=clé_infura
+VITE_ALCHEMY_KEY=clé_alchemy
 ````
 
 Créer un fichier .env dans le dossier hardhat avec ces clés :

@@ -1,15 +1,45 @@
 import { Badge, Card, Text } from "@nextui-org/react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router";
+import { statusToColor, statusToString } from "../../utils/bike";
 
-function NftCard({ name, img, date }) {
+function NftCard({
+  id,
+  collectionAddr,
+  name,
+  image,
+  buildYear,
+  status,
+  isPressable = true,
+  showStatus = true,
+  css,
+}) {
+  const navigate = useNavigate();
+
   return (
-    <Card isPressable>
-      <Card.Body css={{ p: 0 }}>
-        <Card.Image src={img} alt={name} />
+    <Card
+      isPressable={isPressable}
+      css={{
+        height: 400,
+        ...css,
+      }}
+      onClick={
+        collectionAddr ? () => navigate(`/${collectionAddr}/${id}`) : null
+      }
+    >
+      <Card.Body
+        css={{
+          p: 0,
+          flexDirection: "row",
+        }}
+      >
+        <Card.Image src={image} alt={name} />
         <div style={{ position: "absolute", top: "10px", right: "10px" }}>
-          <Badge color="primary" variant="flat" isSquared>
-            En circulation
-          </Badge>
+          {showStatus && (
+            <Badge color={statusToColor(Number(status))}>
+              {statusToString(Number(status))}
+            </Badge>
+          )}
         </div>
       </Card.Body>
       <Card.Footer
@@ -26,11 +56,7 @@ function NftCard({ name, img, date }) {
             fontSize: "$sm",
           }}
         >
-          {new Date(date).toLocaleDateString("fr-FR", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          })}
+          {buildYear}
         </Text>
       </Card.Footer>
     </Card>
@@ -39,9 +65,14 @@ function NftCard({ name, img, date }) {
 
 NftCard.propTypes = {
   id: PropTypes.string.isRequired,
+  collectionAddr: PropTypes.string,
   name: PropTypes.string.isRequired,
-  img: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
+  buildYear: PropTypes.string.isRequired,
+  isPressable: PropTypes.bool,
+  showStatus: PropTypes.bool,
+  css: PropTypes.object,
 };
 
 export default NftCard;

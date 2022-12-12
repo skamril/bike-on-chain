@@ -1,9 +1,9 @@
-import { Navbar, Text, Image, Dropdown } from "@nextui-org/react";
-import { ConnectKitButton } from "connectkit";
+import { Navbar, Text, Image, Dropdown, Button } from "@nextui-org/react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useAccount } from "wagmi";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaPlusSquare } from "react-icons/fa";
 import certificateIcon from "../../assets/images/certificate.png";
+import useEth from "../contexts/EthContext/useEth";
+import { toast } from "react-hot-toast";
 
 const PUBLIC_LINKS_DATA = [
   [
@@ -17,12 +17,41 @@ const PUBLIC_LINKS_DATA = [
 ];
 
 function Header() {
-  const { isConnected } = useAccount();
+  const {
+    state: { isConnected, isOwner, isManufacturer, account },
+  } = useEth();
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const isPublicLinkActive = !!PUBLIC_LINKS_DATA.find(
     ([to]) => to === pathname
   );
+
+  const privateLinksData = [
+    isOwner && [
+      "/add-manufacturer",
+      "Ajouter un fabricant",
+      "Générer un contrat de collection",
+      <FaPlusSquare style={{ width: 30 }} key="icon" />,
+    ],
+    isManufacturer && [
+      "/create-certificates",
+      "Créer des certificats",
+      "Ajouter des certificats pour vos stocks",
+      <FaPlusSquare style={{ width: 30 }} key="icon" />,
+    ],
+    isManufacturer && [
+      "/my-certificate-groups",
+      "Mes groupes de certificats",
+      "Liste de mes groupes",
+      <FaPlusSquare style={{ width: 30 }} key="icon" />,
+    ],
+    [
+      "/my-certificates",
+      "Mes certificats",
+      "Liste des mes vélos",
+      certificateIcon,
+    ],
+  ].filter(Boolean);
 
   return (
     <Navbar
@@ -48,31 +77,49 @@ function Header() {
         ))}
       </Navbar.Content>
       <Navbar.Content>
-        {isConnected && (
-          <Dropdown isBordered>
-            <Navbar.Item>
-              <Dropdown.Button light ripple={false}>
-                Mon espace
-              </Dropdown.Button>
-            </Navbar.Item>
-            <Dropdown.Menu onAction={navigate}>
-              <Dropdown.Item
-                key="/my-certificates"
-                description="Liste des mes vélos"
-                icon={
-                  <img
-                    src={certificateIcon}
-                    width={25}
-                    style={{ marginRight: 5 }}
-                  />
-                }
+        {isConnected ? (
+          <>
+            <Dropdown isBordered>
+              <Navbar.Item>
+                <Dropdown.Button light ripple={false}>
+                  Mon espace
+                </Dropdown.Button>
+              </Navbar.Item>
+              <Dropdown.Menu
+                onAction={navigate}
+                css={{ $$dropdownMenuWidth: 500 }}
               >
-                Mes certificats
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+                {privateLinksData.map(([to, title, description, icon]) => (
+                  <Dropdown.Item
+                    key={to}
+                    description={description}
+                    icon={
+                      typeof icon === "string" ? (
+                        <img src={icon} width={25} style={{ marginRight: 5 }} />
+                      ) : (
+                        icon
+                      )
+                    }
+                  >
+                    {title}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+            <Button
+              onClick={() => {
+                navigator.clipboard.writeText(account);
+                toast("Adresse copié !");
+              }}
+            >
+              {account.substring(0, 18) + "..."}
+            </Button>
+          </>
+        ) : (
+          <Text css={{ background: "khaki", p: 5 }}>
+            Pas connecté sur Polygon Mumbai
+          </Text>
         )}
-        <ConnectKitButton label="Se connecter" />
       </Navbar.Content>
     </Navbar>
   );

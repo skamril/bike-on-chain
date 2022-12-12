@@ -1,36 +1,78 @@
 import { Text } from "@nextui-org/react";
 import NFTList from "../common/NFTList";
+import { useEth } from "../contexts/EthContext";
 import Hero from "./shared/Hero";
-
-const list = [
-  {
-    name: "ROCKRIDER ST 500",
-    img: "https://contents.mediadecathlon.com/p1732642/k$da7d34b23236655c16daa6d6d25d4511/sq/vtt-enfant-rockrider-st-500-24-pouces-9-12-ans-jaune-fluo.jpg?format=auto&f=646x646",
-    date: "01/02/20222",
-  },
-  {
-    name: "ROCKRIDER ST 120",
-    img: "https://contents.mediadecathlon.com/p1690024/k$03d57d020e4bda4ca5c4f2a3b7fec7cc/sq/vtt-enfant-rockrider-st-120-20-pouces-6-9-ans-blanc-bleu.jpg?format=auto&f=646x646",
-    date: "01/02/20222",
-  },
-  {
-    name: "ROCKRIDER ST 120",
-    img: "https://contents.mediadecathlon.com/p1690024/k$03d57d020e4bda4ca5c4f2a3b7fec7cc/sq/vtt-enfant-rockrider-st-120-20-pouces-6-9-ans-blanc-bleu.jpg?format=auto&f=646x646",
-    date: "01/02/20222",
-  },
-  {
-    name: "ROCKRIDER ST 120",
-    img: "https://contents.mediadecathlon.com/p1690024/k$03d57d020e4bda4ca5c4f2a3b7fec7cc/sq/vtt-enfant-rockrider-st-120-20-pouces-6-9-ans-blanc-bleu.jpg?format=auto&f=646x646",
-    date: "01/02/20222",
-  },
-  {
-    name: "ROCKRIDER ST 120",
-    img: "https://contents.mediadecathlon.com/p1690024/k$03d57d020e4bda4ca5c4f2a3b7fec7cc/sq/vtt-enfant-rockrider-st-120-20-pouces-6-9-ans-blanc-bleu.jpg?format=auto&f=646x646",
-    date: "01/02/20222",
-  },
-];
+import Select from "react-select";
+import { useEffect, useState } from "react";
 
 function Certificates() {
+  const {
+    state: { contract, getCollection, account },
+  } = useEth();
+
+  const [manufacturersOptions, setManufacturersOptions] = useState([]);
+  const [currentManufacturer, setCurrentManufacturer] = useState("");
+  const [bikes, setBikes] = useState([]);
+
+  useEffect(() => {
+    async function fetch() {
+      let createdEvents = await contract.getPastEvents("CollectionCreated", {
+        fromBlock: 0,
+        toBlock: "latest",
+      });
+
+      const options = createdEvents.map(({ returnValues }) => ({
+        value: returnValues.collectionAddr,
+        label: `${returnValues.name} (${returnValues.symbol})`,
+      }));
+
+      setManufacturersOptions(options);
+    }
+
+    fetch();
+  }, [contract]);
+
+  useEffect(() => {
+    if (!currentManufacturer) {
+      return;
+    }
+
+    async function fetch() {
+      const collection = await getCollection(currentManufacturer.value);
+
+      let transferEvents = await collection.getPastEvents("Transfer", {
+        fromBlock: 0,
+        toBlock: "latest",
+        filter: {
+          to: account,
+        },
+      });
+
+      const tokenIds = [
+        ...new Set(
+          transferEvents
+            .map((event) => Number(event.returnValues.tokenId))
+            .sort((a, b) => a - b)
+        ),
+      ];
+
+      const bikes = await Promise.all(
+        tokenIds.map((id) =>
+          collection.methods.getBike(id).call({ from: account })
+        )
+      );
+
+      setBikes(
+        bikes.map((bike) => ({
+          ...bike,
+          collectionAddr: currentManufacturer.value,
+        }))
+      );
+    }
+
+    fetch();
+  }, [account, currentManufacturer, getCollection]);
+
   return (
     <>
       <Hero>
@@ -38,7 +80,12 @@ function Certificates() {
           Mes certificats
         </Text>
       </Hero>
-      <NFTList list={list} />
+      <Select
+        placeholder="Choisir le fabricant"
+        options={manufacturersOptions}
+        onChange={setCurrentManufacturer}
+      />
+      <NFTList list={bikes} />
     </>
   );
 }
