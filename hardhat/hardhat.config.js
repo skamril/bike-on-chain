@@ -15,7 +15,6 @@ module.exports = {
     },
   },
   networks: {
-    hardhat: {},
     mumbai: {
       url: PROVIDER_URL,
       accounts: [`0x${PRIVATE_KEY}`]
