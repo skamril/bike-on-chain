@@ -12,7 +12,7 @@ function Group({ id, amount, template, setTransferModal }) {
         borderRadius: 10,
         display: "flex",
         flexDirection: "column",
-        height: 500,
+        height: 400,
       }}
       title={template.description}
     >
@@ -21,6 +21,7 @@ function Group({ id, amount, template, setTransferModal }) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          gap: 15,
         }}
       >
         <div
@@ -37,7 +38,7 @@ function Group({ id, amount, template, setTransferModal }) {
         </div>
         <Button
           flat
-          size="sm"
+          size="xs"
           onClick={() => setTransferModal({ groupId: id })}
         >
           Transférer à un revendeur

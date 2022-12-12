@@ -1,16 +1,32 @@
 import { Badge, Card, Text } from "@nextui-org/react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router";
+import { statusToColor, statusToString } from "../../utils/bike";
 
 function NftCard({
+  id,
+  collectionAddr,
   name,
   image,
   buildYear,
+  status,
   isPressable = true,
   showStatus = true,
   css,
 }) {
+  const navigate = useNavigate();
+
   return (
-    <Card isPressable={isPressable} css={css}>
+    <Card
+      isPressable={isPressable}
+      css={{
+        height: 400,
+        ...css,
+      }}
+      onClick={
+        collectionAddr ? () => navigate(`/${collectionAddr}/${id}`) : null
+      }
+    >
       <Card.Body
         css={{
           p: 0,
@@ -20,8 +36,8 @@ function NftCard({
         <Card.Image src={image} alt={name} />
         <div style={{ position: "absolute", top: "10px", right: "10px" }}>
           {showStatus && (
-            <Badge color="primary" variant="flat" isSquared>
-              En circulation
+            <Badge color={statusToColor(Number(status))}>
+              {statusToString(Number(status))}
             </Badge>
           )}
         </div>
@@ -49,11 +65,13 @@ function NftCard({
 
 NftCard.propTypes = {
   id: PropTypes.string.isRequired,
+  collectionAddr: PropTypes.string,
   name: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
   buildYear: PropTypes.string.isRequired,
-  isPressable: PropTypes.bool.isRequired,
-  showStatus: PropTypes.bool.isRequired,
+  isPressable: PropTypes.bool,
+  showStatus: PropTypes.bool,
   css: PropTypes.object,
 };
 

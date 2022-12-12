@@ -13,6 +13,7 @@ import useEth from "../contexts/EthContext/useEth";
 import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import CertificateGroups from "./CertificateGroups";
+import Nft from "./Nft";
 
 function App() {
   const {
@@ -61,6 +62,10 @@ function App() {
                 path="/my-certificates"
                 element={<Certificates />}
                 setLoading={setLoading}
+              />
+              <Route
+                path="/:collectionAddr/:tokenId"
+                element={<Nft setLoading={setLoading} />}
               />
             </>
           )}

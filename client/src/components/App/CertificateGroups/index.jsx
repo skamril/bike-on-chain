@@ -41,7 +41,7 @@ function CertificateGroups({ setLoading }) {
     }
 
     fetch();
-  }, []);
+  }, [getCollection]);
 
   useEffect(() => {
     let emitter;
