@@ -11,9 +11,11 @@ const initialState = {
   networkID: null,
   contract: null,
   isOwner: false,
+  isManufacturer: false,
   account: false,
   isConnected: false,
   loadStatus: "idle",
+  getCollection: null,
 };
 
 const reducer = (state, action) => {
