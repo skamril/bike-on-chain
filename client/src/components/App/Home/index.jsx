@@ -39,6 +39,7 @@ function Home() {
         <Text
           h1
           css={{
+            borderRadius:"5px",
             background: "white",
             padding: "5px 15px",
           }}
@@ -62,10 +63,14 @@ function Home() {
         }}
       >
         <TextBlock icon={bicycleBlockChainIcon}>
-          Blockchain technology is an advanced database mechanism that allows
-          transparent information sharing within a business network. A
-          blockchain database stores data in blocks that are linked together in
-          a chain.
+          On peut définir la blockchain comme une base de données qui contient
+          l’historique de tous les échanges effectués entre ses utilisateurs
+          depuis sa création. Cette base de données est sécurisée et
+          distribuée : elle est partagée par ses différents utilisateurs, sans
+          intermédiaire, ce qui permet à chacun de vérifier la validité de la
+          chaîne. Notre application s'appuie sur la Blockchain POLYGON, vous
+          offrant la confidentialité,la transparence et la sécurité d'une
+          blockchain publique éprouvé.
         </TextBlock>
         <TextBlock icon={certificateIcon}>
           Les certificats d'authentification serveur sont des certificats qui

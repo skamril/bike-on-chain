@@ -1,6 +1,6 @@
 export function statusToString(status) {
   if (status == 0) {
-    return "Inatif";
+    return "Inactif";
   }
   if (status == 1) {
     return "En vente";
