@@ -4,7 +4,9 @@
 
 DApp permettant de gérer ses vélos sur la blockchain ! 
 
-[Lien](http://bike-on-chain.vercel.app/).
+[Lien du site](http://bike-on-chain.vercel.app/).
+
+[Lien de la vidéo](https://www.loom.com/share/2b49ea4e515d430aad6a96d6fc9b573c).
 
 ## Mode développement
 
