@@ -50,7 +50,7 @@ function CreateCertificates({ setLoading }) {
     <>
       <Hero>
         <Text h2 css={{ m: 0 }}>
-          Créer un certificats
+          Créer des certificats
         </Text>
       </Hero>
       <Form onSubmit={handleSubmit} submitLabel="Créer">

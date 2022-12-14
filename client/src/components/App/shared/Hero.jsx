@@ -1,15 +1,17 @@
-import bikesMotif from "../../../assets/images/bikes-motif.jpeg";
+import bikesMotif from "../../../assets/images/bocnft.png";
 import PropTypes from "prop-types";
 
 function Hero({ children }) {
   return (
     <div
       style={{
+        height:"400px",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         background: `url(${bikesMotif})`,
-        padding: "50px 0",
+        backgroundSize: "130%",
+        padding: "150px 0",
         marginBottom: 15,
       }}
     >

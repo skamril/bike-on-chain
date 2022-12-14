@@ -8,6 +8,7 @@ import {
   Col,
   Row,
   Grid,
+  Badge
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -148,13 +149,11 @@ function Nft({ setLoading }) {
         }}
       >
         <Row>
-          <Text h6 color="success" size={12}>
-            {bike.status == 1 ? "Available" : null}
-          </Text>
+         
 
           <Col>
             <Row justify="flex-end">
-              <Button bordered flat auto color="secondary">
+              <Badge bordered flat auto color={statusToColor(Number(bike.status))}>
                 <Text
                  
                   css={{ color: "greens" }}
@@ -164,7 +163,7 @@ function Nft({ setLoading }) {
                 >
                   {statusToString(Number(bike.status))}
                 </Text>
-              </Button>
+              </Badge>
             </Row>
           </Col>
         </Row>
@@ -172,6 +171,7 @@ function Nft({ setLoading }) {
     </Card>
   );
 
+  
   return (
     <div>
       <Grid.Container size={10}>
@@ -179,14 +179,6 @@ function Nft({ setLoading }) {
           <Card1 />
         </Grid>
         <Grid css={{ margin: "auto" }} size={6}>
-          <Text
-            h3
-            weight="bold"
-            size={15}
-            css={{ mt: "20px", p: "35px", mw: "400px" }}
-          >
-            Vélo connecté
-          </Text>
           <Button
             size="lg"
             css={{ mt: "50px", minWidth: "160px" }}
@@ -204,12 +196,12 @@ function Nft({ setLoading }) {
             size="lg"
             css={{ mt: "10px", minWidth: "160px" }}
             shadow
-            color="warning"
+            color="gradient"
             auto
             onClick={() => setShowTransferModal(true)}
           >
             <Text weight="bold" h3 size={14} color="White" css={{pt:"10px"}}>
-              Transfer NFT
+            Transférer NFT
             </Text>
           </Button>
           <Button
@@ -224,13 +216,13 @@ function Nft({ setLoading }) {
               href={`https://testnets.opensea.io/assets/mumbai/${collectionAddr}/${tokenId}`}
             >
             <Text weight="bold" h3 size={14} color="White" css={{pt:"10px"}}>
-              {" "}
+              
               Look at OpenSea
              
             </Text>
             </Link>
           </Button>
-          <Button  href={`https://mumbai.polygonscan.com/address/${collectionAddr}`} size="lg" css={{ mt: "10px", minWidth: "160px" }} shadow auto>
+          <Button  color="gradient"  size="lg" css={{ mt: "10px", minWidth: "160px" }} shadow auto>
             <Link
               href={`https://mumbai.polygonscan.com/address/${collectionAddr}`}
             >
@@ -248,9 +240,9 @@ function Nft({ setLoading }) {
           css={{ m: "1px", width: "500px", minWidth: "50px" }}
         >
           <Card.Body>
-            <Text h3 size={14} weight="bold">
-              {" "}
-              Description{" "}
+            <Text css={{textAlign :"center"}} h3 size={14} weight="bold">
+              
+              Description
             </Text>
           </Card.Body>
         </Card>
@@ -269,10 +261,11 @@ function Nft({ setLoading }) {
             }}
           >
             <Card.Body>
-              <Text h3 weight="bold" size={14}>
+              <Text css={{textAlign :"center"}} h3 weight="bold" size={14}>
                 Etat du vélo
               </Text>
               <Text
+              css={{textAlign :"center"}}
                 color={statusToColor(Number(bike.status))}
                 h3
                 weight="bold"
@@ -289,11 +282,14 @@ function Nft({ setLoading }) {
           css={{ m: "1px", width: "250px", minWidth: "50px" }}
         >
           <Card.Body>
-            <Text h3 weight="bold" size={14}>
+            <Text css={{textAlign :"center"}} h3 weight="bold" size={14}>
               Date de première vente
             </Text>
-            <Text h3 weight="bold" size={12}>
-              {new Date(bike.firstPurchaseDate).toLocaleDateString("fr-FR", {
+            <Text css={{textAlign :"center"}}h3 weight="bold" size={12}>
+
+            
+              
+           { new Date(Number(bike.firstPurchaseDate)).toLocaleDateString("fr-FR", {
                 year: "numeric",
                 month: "short",
                 day: "numeric",
@@ -310,10 +306,10 @@ function Nft({ setLoading }) {
             css={{ m: "1px", width: "250px", minWidth: "50px" }}
           >
             <Card.Body>
-              <Text h3 weight="bold" size={14}>
-                Serial/Number{" "}
+              <Text css={{textAlign :"center"}} h3 weight="bold" size={14}>
+               Numéro de série
               </Text>
-              <Text h3 weight="bold" size={14}>
+              <Text  css={{textAlign :"center"}} h3 weight="bold" size={14}>
                 {bike.serialNumber ? bike.serialNumber : "N/A"}
               </Text>
             </Card.Body>
@@ -325,10 +321,10 @@ function Nft({ setLoading }) {
           css={{ m: "1px", width: "250px", minWidth: "50px" }}
         >
           <Card.Body>
-            <Text h3 weight="bold" size={14}>
-              Anée de fabrication
+            <Text css={{textAlign :"center"}} h3 weight="bold" size={14}>
+              Année de fabrication
             </Text>
-            <Text h3 weight="bold" size={12}>
+            <Text css={{textAlign :"center"}} h3 weight="bold" size={12}>
               {bike.buildYear}
             </Text>
           </Card.Body>
@@ -341,7 +337,7 @@ function Nft({ setLoading }) {
           >
             <Card.Body>
               <Text weight="bold" align="center" size={14}>
-                A propos de Decathlon Elops Electric Collection{" "}
+                A propos de {bike.description}
               </Text>
             </Card.Body>
           </Card>
