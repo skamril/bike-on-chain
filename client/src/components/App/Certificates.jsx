@@ -2,6 +2,7 @@ import { Text } from "@nextui-org/react";
 import NFTList from "../common/NFTList";
 import { useEth } from "../contexts/EthContext";
 import Hero from "./shared/Hero";
+import NFTMotif from "../../assets/images/bocnft.png";
 import Select from "react-select";
 import { useEffect, useState } from "react";
 
@@ -40,21 +41,18 @@ function Certificates() {
     async function fetch() {
       const collection = await getCollection(currentManufacturer.value);
 
-      let transferEvents = await collection.getPastEvents("Transfer", {
-        fromBlock: 0,
-        toBlock: "latest",
-        filter: {
-          to: account,
-        },
-      });
+      const total = await collection.methods
+        .totalSupply()
+        .call({ from: account });
 
-      const tokenIds = [
-        ...new Set(
-          transferEvents
-            .map((event) => Number(event.returnValues.tokenId))
-            .sort((a, b) => a - b)
-        ),
-      ];
+      const tokenIds = [];
+
+      for (let i = 0; i < total; i++) {
+        const id = await collection.methods
+          .tokenOfOwnerByIndex(account, i)
+          .call({ from: account });
+        tokenIds.push(Number(id));
+      }
 
       const bikes = await Promise.all(
         tokenIds.map((id) =>
@@ -75,7 +73,13 @@ function Certificates() {
 
   return (
     <>
-      <Hero>
+      <Hero
+        style={{
+          background: `url(${NFTMotif}) center`,
+          padding: "100px 0",
+          backgroundSize: "cover",
+        }}
+      >
         <Text h2 css={{ m: 0 }}>
           Mes certificats
         </Text>

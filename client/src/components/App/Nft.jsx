@@ -8,7 +8,7 @@ import {
   Col,
   Row,
   Grid,
-  Badge
+  Badge,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -88,7 +88,8 @@ function Nft({ setLoading }) {
             account,
             event.target.to.value,
             tokenId,
-            event.target.sn.value
+            event.target.sn.value,
+            new Date().getTime()
           )
           .send({ from: account });
       } else {
@@ -149,13 +150,15 @@ function Nft({ setLoading }) {
         }}
       >
         <Row>
-         
-
           <Col>
             <Row justify="flex-end">
-              <Badge bordered flat auto color={statusToColor(Number(bike.status))}>
+              <Badge
+                bordered
+                flat
+                auto
+                color={statusToColor(Number(bike.status))}
+              >
                 <Text
-                 
                   css={{ color: "greens" }}
                   size={12}
                   weight="bold"
@@ -171,7 +174,6 @@ function Nft({ setLoading }) {
     </Card>
   );
 
-  
   return (
     <div>
       <Grid.Container size={10}>
@@ -180,6 +182,7 @@ function Nft({ setLoading }) {
         </Grid>
         <Grid css={{ margin: "auto" }} size={6}>
           <Button
+            isHoverable
             size="lg"
             css={{ mt: "50px", minWidth: "160px" }}
             shadow
@@ -187,12 +190,12 @@ function Nft({ setLoading }) {
             auto
             onClick={() => setShowChangeStatusModal(true)}
           >
-            <Text weight="bold" h3 size={14} color="White" css={{pt:"10px"}}>
-              
+            <Text weight="bold" h3 size={14} color="White" css={{ pt: "10px" }}>
               Change Status
             </Text>
           </Button>
           <Button
+            isHoverable
             size="lg"
             css={{ mt: "10px", minWidth: "160px" }}
             shadow
@@ -200,12 +203,12 @@ function Nft({ setLoading }) {
             auto
             onClick={() => setShowTransferModal(true)}
           >
-            <Text weight="bold" h3 size={14} color="White" css={{pt:"10px"}}>
-            Transférer NFT
+            <Text weight="bold" h3 size={14} color="White" css={{ pt: "10px" }}>
+              Transférer NFT
             </Text>
           </Button>
           <Button
-           
+            isHoverable
             size="lg"
             css={{ mt: "10px", minWidth: "160px" }}
             shadow
@@ -215,43 +218,45 @@ function Nft({ setLoading }) {
             <Link
               href={`https://testnets.opensea.io/assets/mumbai/${collectionAddr}/${tokenId}`}
             >
-            <Text weight="bold" h3 size={14} color="White" css={{pt:"10px"}}>
-              
-              Look at OpenSea
-             
-            </Text>
+              <Text
+                weight="bold"
+                h3
+                size={14}
+                color="White"
+                css={{ pt: "10px" }}
+              >
+                Look at OpenSea
+              </Text>
             </Link>
           </Button>
-          <Button  color="gradient"  size="lg" css={{ mt: "10px", minWidth: "160px" }} shadow auto>
+          <Button
+            isHoverable
+            color="gradient"
+            size="lg"
+            css={{ mt: "10px", minWidth: "160px" }}
+            shadow
+            auto
+          >
             <Link
               href={`https://mumbai.polygonscan.com/address/${collectionAddr}`}
             >
-            <Text weight="bold" h3 size={14} color="White" css={{pt:"10px"}}>
-            Verify Contract
-            </Text>
+              <Text
+                weight="bold"
+                h3
+                size={14}
+                color="White"
+                css={{ pt: "10px" }}
+              >
+                Verify Contract
+              </Text>
             </Link>
           </Button>
         </Grid>
       </Grid.Container>
 
       <Grid.Container>
-        <Card
-          variant="bordered"
-          css={{ m: "1px", width: "500px", minWidth: "50px" }}
-        >
-          <Card.Body>
-            <Text css={{textAlign :"center"}} h3 size={14} weight="bold">
-              
-              Description
-            </Text>
-          </Card.Body>
-        </Card>
-      </Grid.Container>
-
-      <Grid.Container>
         <Grid size={6}>
           <Card
-            isHoverable
             variant="bordered"
             css={{
               m: "1px",
@@ -261,11 +266,11 @@ function Nft({ setLoading }) {
             }}
           >
             <Card.Body>
-              <Text css={{textAlign :"center"}} h3 weight="bold" size={14}>
+              <Text css={{ textAlign: "center" }} h3 weight="bold" size={14}>
                 Etat du vélo
               </Text>
               <Text
-              css={{textAlign :"center"}}
+                css={{ textAlign: "center", overflow: "hidden" }}
                 color={statusToColor(Number(bike.status))}
                 h3
                 weight="bold"
@@ -277,23 +282,22 @@ function Nft({ setLoading }) {
           </Card>
         </Grid>
         <Card
-          isHoverable
           variant="bordered"
           css={{ m: "1px", width: "250px", minWidth: "50px" }}
         >
           <Card.Body>
-            <Text css={{textAlign :"center"}} h3 weight="bold" size={14}>
+            <Text css={{ textAlign: "center" }} h3 weight="bold" size={14}>
               Date de première vente
             </Text>
-            <Text css={{textAlign :"center"}}h3 weight="bold" size={12}>
-
-            
-              
-           { new Date(Number(bike.firstPurchaseDate)).toLocaleDateString("fr-FR", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
+            <Text css={{ textAlign: "center" }} h3 weight="bold" size={12}>
+              {new Date(Number(bike.firstPurchaseDate)).toLocaleDateString(
+                "fr-FR",
+                {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                }
+              )}
             </Text>
           </Card.Body>
         </Card>
@@ -301,30 +305,28 @@ function Nft({ setLoading }) {
       <Grid.Container>
         <Grid size={6}>
           <Card
-            isHoverable
             variant="bordered"
             css={{ m: "1px", width: "250px", minWidth: "50px" }}
           >
             <Card.Body>
-              <Text css={{textAlign :"center"}} h3 weight="bold" size={14}>
-               Numéro de série
+              <Text css={{ textAlign: "center" }} h3 weight="bold" size={14}>
+                Numéro de série
               </Text>
-              <Text  css={{textAlign :"center"}} h3 weight="bold" size={14}>
+              <Text css={{ textAlign: "center" }} h3 weight="bold" size={14}>
                 {bike.serialNumber ? bike.serialNumber : "N/A"}
               </Text>
             </Card.Body>
           </Card>
         </Grid>
         <Card
-          isHoverable
           variant="bordered"
           css={{ m: "1px", width: "250px", minWidth: "50px" }}
         >
           <Card.Body>
-            <Text css={{textAlign :"center"}} h3 weight="bold" size={14}>
+            <Text css={{ textAlign: "center" }} h3 weight="bold" size={14}>
               Année de fabrication
             </Text>
-            <Text css={{textAlign :"center"}} h3 weight="bold" size={12}>
+            <Text css={{ textAlign: "center" }} h3 weight="bold" size={12}>
               {bike.buildYear}
             </Text>
           </Card.Body>
