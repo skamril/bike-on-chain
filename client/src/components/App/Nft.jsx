@@ -61,7 +61,7 @@ function Nft({ setLoading }) {
             .setOutOfService(tokenId)
             .send({ from: account });
         } else if (status === 4) {
-          await collection.methods.setStealed(tokenId).call({ from: account });
+          await collection.methods.setStealed(tokenId).send({ from: account });
         }
       } catch (e) {
         // eslint-disable-next-line no-console
