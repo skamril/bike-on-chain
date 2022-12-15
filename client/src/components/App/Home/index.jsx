@@ -39,6 +39,7 @@ function Home() {
         <Text
           h1
           css={{
+            borderRadius:"4px",
             background: "white",
             padding: "5px 15px",
           }}

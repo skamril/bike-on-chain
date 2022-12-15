@@ -26,6 +26,7 @@ function CreateCertificates({ setLoading }) {
         .batchMint(
           event.target.amount.value,
           event.target.name.value,
+          event.target.model.value,
           event.target.description.value,
           event.target.image.value,
           event.target.buildYear.value
@@ -50,7 +51,7 @@ function CreateCertificates({ setLoading }) {
     <>
       <Hero>
         <Text h2 css={{ m: 0 }}>
-          Créer un certificats
+          Créer des certificats
         </Text>
       </Hero>
       <Form onSubmit={handleSubmit} submitLabel="Créer">
@@ -63,6 +64,7 @@ function CreateCertificates({ setLoading }) {
           required
         />
         <Input name="name" clearable bordered label="Nom" required />
+        <Input name="model" clearable bordered label="Modèle" required />
         <Input
           name="description"
           clearable

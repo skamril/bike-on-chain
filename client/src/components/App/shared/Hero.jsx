@@ -1,7 +1,7 @@
 import bikesMotif from "../../../assets/images/bikes-motif.jpeg";
 import PropTypes from "prop-types";
 
-function Hero({ children }) {
+function Hero({ children, style }) {
   return (
     <div
       style={{
@@ -11,6 +11,7 @@ function Hero({ children }) {
         background: `url(${bikesMotif})`,
         padding: "50px 0",
         marginBottom: 15,
+        ...style,
       }}
     >
       <div
@@ -31,6 +32,7 @@ function Hero({ children }) {
 
 Hero.propTypes = {
   children: PropTypes.node,
+  style: PropTypes.object,
 };
 
 export default Hero;

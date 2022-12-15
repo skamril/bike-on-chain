@@ -2,7 +2,7 @@
 
 pragma solidity 0.8.17;
 
-import "../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 import "../node_modules/@openzeppelin/contracts/utils/Counters.sol";
 import "../node_modules/@openzeppelin/contracts/utils/Strings.sol";
@@ -14,7 +14,7 @@ import "../node_modules/@openzeppelin/contracts/utils/Base64.sol";
 /// @dev Use Ownable contract from OpenZeppelin
 /// @notice Allow to create a collection of bikes.
 ///         To mint multiple bike at once.
-contract BikeCollection is ERC721URIStorage, Ownable {
+contract BikeCollection is ERC721Enumerable, Ownable {
     using Counters for Counters.Counter; 
 
     ////////////////////////////////////////////////////////////////
@@ -36,6 +36,7 @@ contract BikeCollection is ERC721URIStorage, Ownable {
     struct Bike {
         uint256 id;
         string name;
+        string model;
         string description;
         string image;
         uint16 buildYear;
@@ -93,6 +94,7 @@ contract BikeCollection is ERC721URIStorage, Ownable {
     function batchMint(
         uint16 amount,
         string calldata name, 
+        string calldata model,  
         string calldata description,  
         string calldata image,
         uint16 buildYear
@@ -101,19 +103,20 @@ contract BikeCollection is ERC721URIStorage, Ownable {
         uint256 currentGroupId = _groupIds.current();
 
         for (uint i = 0; i < amount; i++) {
-            uint256 tokenId = _mintBike(name, description, image, buildYear);
+            uint256 tokenId = _mintBike(name, model, description, image, buildYear);
             _tokenIdsByGroupId[currentGroupId].push(tokenId);
         } 
 
         emit GroupCreated(
             currentGroupId, 
             amount, 
-            Bike(0, name, description, image, buildYear, 0, "", Status.Idle)
+            Bike(0, name, model, description, image, buildYear, 0, "", Status.Idle)
         );
     }
 
     function _mintBike(
         string calldata name, 
+        string calldata model,  
         string calldata description,  
         string calldata image,
         uint16 buildYear
@@ -121,8 +124,7 @@ contract BikeCollection is ERC721URIStorage, Ownable {
         _tokenIds.increment();
         uint256 currentTokenId = _tokenIds.current();
         _safeMint(msg.sender, currentTokenId);
-        _bikeByTokenId[currentTokenId] = Bike(currentTokenId, name, description, image, buildYear, 0, "", Status.Idle);
-        _setTokenURI(currentTokenId, _getTokenURI(currentTokenId));
+        _bikeByTokenId[currentTokenId] = Bike(currentTokenId, name, model, description, image, buildYear, 0, "", Status.Idle);
 
         return currentTokenId;
     }
@@ -149,11 +151,11 @@ contract BikeCollection is ERC721URIStorage, Ownable {
         emit GroupUpdated(groupId, _tokenIdsByGroupId[groupId].length);
     }
 
-    function transferForService(address from, address to, uint256 tokenId, string calldata serialNumber) external ifTokenExist(tokenId) ifTokenApprovedOrOwner(tokenId) {
+    function transferForService(address from, address to, uint256 tokenId, string calldata serialNumber, uint256 firstPurchaseDate) external ifTokenExist(tokenId) ifTokenApprovedOrOwner(tokenId) {
         require(_bikeByTokenId[tokenId].status == Status.OnSale, "Not on sale");
         require(keccak256(abi.encode(serialNumber)) != keccak256(abi.encode("")), "SN empty");
 
-        _bikeByTokenId[tokenId].firstPurchaseDate = block.timestamp;
+        _bikeByTokenId[tokenId].firstPurchaseDate = firstPurchaseDate;
         _bikeByTokenId[tokenId].serialNumber = serialNumber;
         _bikeByTokenId[tokenId].status = Status.InService;
 
@@ -218,7 +220,13 @@ contract BikeCollection is ERC721URIStorage, Ownable {
         return _groupIds.current();
     }
 
-    function _getTokenURI(uint256 tokenId) private view ifTokenExist(tokenId) returns (string memory) {
+    ////////////////////////////////////////////////////////////////
+    // URI
+    ////////////////////////////////////////////////////////////////
+
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+        _requireMinted(tokenId);
+
         Bike memory bike = _bikeByTokenId[tokenId];
 
         bytes memory dataURI = abi.encodePacked(
