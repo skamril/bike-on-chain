@@ -88,8 +88,7 @@ function Nft({ setLoading }) {
             account,
             event.target.to.value,
             tokenId,
-            event.target.sn.value,
-            new Date().getTime()
+            event.target.sn.value
           )
           .send({ from: account });
       } else {
@@ -153,6 +152,7 @@ function Nft({ setLoading }) {
           <Col>
             <Row justify="flex-end">
               <Badge
+             
                 bordered
                 flat
                 auto
@@ -182,7 +182,6 @@ function Nft({ setLoading }) {
         </Grid>
         <Grid css={{ margin: "auto" }} size={6}>
           <Button
-            isHoverable
             size="lg"
             css={{ mt: "50px", minWidth: "160px" }}
             shadow
@@ -195,7 +194,6 @@ function Nft({ setLoading }) {
             </Text>
           </Button>
           <Button
-            isHoverable
             size="lg"
             css={{ mt: "10px", minWidth: "160px" }}
             shadow
@@ -208,7 +206,6 @@ function Nft({ setLoading }) {
             </Text>
           </Button>
           <Button
-            isHoverable
             size="lg"
             css={{ mt: "10px", minWidth: "160px" }}
             shadow
@@ -230,7 +227,6 @@ function Nft({ setLoading }) {
             </Link>
           </Button>
           <Button
-            isHoverable
             color="gradient"
             size="lg"
             css={{ mt: "10px", minWidth: "160px" }}
@@ -270,7 +266,7 @@ function Nft({ setLoading }) {
                 Etat du vélo
               </Text>
               <Text
-                css={{ textAlign: "center", overflow: "hidden" }}
+                css={{ textAlign: "center" }}
                 color={statusToColor(Number(bike.status))}
                 h3
                 weight="bold"
@@ -282,6 +278,7 @@ function Nft({ setLoading }) {
           </Card>
         </Grid>
         <Card
+         
           variant="bordered"
           css={{ m: "1px", width: "250px", minWidth: "50px" }}
         >
@@ -319,6 +316,7 @@ function Nft({ setLoading }) {
           </Card>
         </Grid>
         <Card
+         
           variant="bordered"
           css={{ m: "1px", width: "250px", minWidth: "50px" }}
         >
